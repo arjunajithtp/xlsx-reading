@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form id="docUploadForm" action="/upload" method="POST" enctype="multipart/form-data">
+        <label class="">Document Name</label> <input id="documentName" name="documentName" class="form-control" type="text" placeholder="Document Title"/>
+        <label class="">Select Document</label> <input type="file" name="templateFile"  id="templateFile" accept=".xlsx">
+        <button type="submit" class="btn registration">Upload</button>
+    </form>
+
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <script type="text/javascript" src="/static/plugins/jquery.validate.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    <script type="text/javascript">
+        $().ready(function() {
+            jQuery.validator.addMethod("extension", function(value, element, param) {
+                param = typeof param === "string" ? param.replace(/,/g, "|") : "png|jpe?g|gif";
+                return this.optional(element) || value.match(new RegExp("\\.(" + param + ")$", "i"));
+            });
+            $("#docUploadForm").validate({
+                rules: {
+                    documentName: "required",
+                    processName: "required",
+                    templateFile: {
+                        required: true,
+                        extension:"xlsx"
+                    }
+                },
+                messages: {
+                    documentName: "Please provide a Document Name.",
+                    processName: "Please select a process type.",
+                    templateFile: {
+                        required: "Please upload a file of type .xlsx.",
+                        extension: "Only files of type .xlsx are accepted."
+                    }
+                },
+                submitHandler: function(form){
+                    var link = "/upload";
+                    $(form).ajaxSubmit({
+                        url: link,
+                        type: 'POST',
+                        dataType: 'html',
+                        data : $( "#docUploadForm" ).serialize(),
+                        success : function(data) {
+                            // if (data.charAt(0) == "/"){
+                            //     window.location.href = data;
+                            // } else {
+                            //     document.getElementById('loginError').innerHTML = data;
+                            // }
+                        }
+                    });
+                    return false
+                }
+            });
+        });
+    </script>
+</body>
+</html>
