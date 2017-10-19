@@ -1,8 +1,8 @@
 package routers
 
 import (
-	"fileUpload/controllers"
 	"github.com/astaxie/beego"
+	"xlsx-reading/controllers"
 )
 
 func init() {
